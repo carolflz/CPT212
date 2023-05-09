@@ -1,30 +1,50 @@
-/** 1. Convert the radix sort algorithm that is described in the Appendix section 
-to Java program. Note: You must implement exactly like what is 
-described. (40%) **/
+/** 2. Modify the radix sort algorithm to sort floating point number. The program 
+must be a modification, and not a different implementation or variant of 
+radix sort. (30%) **/
 
 import java.util.Arrays;
 
-public class RadixSort_hundredth {
+public class RadixSort_float {
 
     public static void main(String[] args) {
         // Sample input array to be sorted
-        int[] arr = {275,87,426,61,409,170,677,503};
+        double[] arr = {275.4,87.2,426.1,61.9,409.5,170.8,677.3,503.0};
         
         // Call radixSort method to sort the input array
-        int[] sortedArray = radixSort(arr);
+        double[] sortedArray = radixSort(arr);
         
         // Print the final sorted array
         System.out.println("Final sorted array:");
         System.out.println(Arrays.toString(sortedArray));
     }
 
-    public static int[] radixSort(int[] arr) {
+ /** Method 1: Can work but got 4 iterations
+  * To find the maximun digits for the floationg-point number in an array
+    public static int maxFloatDigits(double[] arr) {
+        int maxDigits = 0;
+        for (double num : arr) {
+            String[] parts = Double.toString(num).split("\\.");
+            int digits = parts[0].length() + parts[1].length();
+            if (digits > maxDigits) {
+                maxDigits = digits;
+            }
+        }
+        return maxDigits;
+    }
+
+    public static double[] radixSort(double[] arr) {
         // Define the maximum number of digits to sort, up to the hundredth place
-        int maxDigits = 3;
-        
+        int maxDigits = maxFloatDigits(arr); **/
+
+    //Method 2: Settle in 3 iterations    
+    public static double[] radixSort(double[] arr) {
+        // Define the maximum number of digits to sort, based on the largest magnitude of the input array
+        double maxMagnitude = Arrays.stream(arr).map(Math::abs).max().orElse(0);
+        int maxDigits = (int) Math.log10(maxMagnitude) + 1;
+    
         // Initialize 2D arrays (bins) Array1 and Array2 to store values during sorting
-        int[][] Array1 = new int[10][arr.length];
-        int[][] Array2 = new int[10][arr.length];
+        double[][] Array1 = new double[10][arr.length];
+        double[][] Array2 = new double[10][arr.length];
 
         // Loop through each digit position up to maxDigits
         for (int d = 0; d < maxDigits; d++) {
@@ -32,9 +52,9 @@ public class RadixSort_hundredth {
             int[] count = new int[10];
             
             // Iterate through the input array to extract digits at the current position
-            for (int i : arr) {
+            for (double i : arr) {
                 // Calculate the digit at the current position using integer division and modulo
-                int digit = (i / (int) Math.pow(10, d)) % 10;
+                int digit = (int) ((i / (int) Math.pow(10, d)) % 10);
                 
                 // Add the value to the appropriate bin in Array1 or Array2 based on digit position
                 if (d % 2 == 0) {
@@ -58,15 +78,17 @@ public class RadixSort_hundredth {
             if (d % 2 == 0) {
                 System.out.println("Array1 after " + (d + 1) + " iteration:");
                 print2DArray(Array1, count);
+                System.out.println("\n");
             } else {
                 System.out.println("Array2 after " + (d + 1) + " iteration:");
                 print2DArray(Array2, count);
+                System.out.println("\n");
             }
 
             // Clear Array1 for reuse in the third iteration (hundredth place)
             if (d == 0) {
                 for (int i = 0; i < 10; i++) {
-                    Arrays.fill(Array1[i], 0, count[i], 0);
+                    Arrays.fill(Array1[i], 0, count[i], 0.0);
                 }
             }
         }
@@ -75,7 +97,7 @@ public class RadixSort_hundredth {
     }
 
     // Helper method to print 2D bin arrays with their counts
-    private static void print2DArray(int[][] arr, int[] count) {
+    private static void print2DArray(double[][] arr, int[] count) {
         // Iterate through each row of the 2D array (bins)
         for (int i = 0; i < arr.length; i++) {
             // Print the bin number
@@ -91,11 +113,4 @@ public class RadixSort_hundredth {
         }
     }
 }
-
-
-
-
-
-
-
 
