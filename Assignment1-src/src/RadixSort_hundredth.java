@@ -58,9 +58,11 @@ public class RadixSort_hundredth {
             if (d % 2 == 0) {
                 System.out.println("Array1 after " + (d + 1) + " iteration:");
                 print2DArray(Array1, count);
+                System.out.println("\n");
             } else {
                 System.out.println("Array2 after " + (d + 1) + " iteration:");
                 print2DArray(Array2, count);
+                System.out.println("\n");
             }
 
             // Clear Array1 for reuse in the third iteration (hundredth place)
