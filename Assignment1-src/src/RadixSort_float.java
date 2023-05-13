@@ -8,7 +8,7 @@ public class RadixSort_float {
 
     public static void main(String[] args) {
         // Sample input array to be sorted
-        double[] arr = {275.4,87.2,426.1,61.9,409.5,170.8,677.3,503.0};
+        double[] arr = {275.4,87.2222,87.2221,90.32,20.12,426.1,61.9,409.5,170.8,107.888,677.3,503.0};
         
         // Call radixSort method to sort the input array
         double[] sortedArray = radixSort(arr);
@@ -39,9 +39,9 @@ public class RadixSort_float {
     //Method 2: Settle in 3 iterations    
     public static double[] radixSort(double[] arr) {
         // Define the maximum number of digits to sort, based on the largest magnitude of the input array
-        double maxMagnitude = Arrays.stream(arr).map(Math::abs).max().orElse(0);
-        int maxDigits = (int) Math.log10(maxMagnitude) + 1;
-    
+        int maxDigits = maxLengthOfSignificantFigure(arr);
+   
+
         // Initialize 2D arrays (bins) Array1 and Array2 to store values during sorting
         double[][] Array1 = new double[10][arr.length];
         double[][] Array2 = new double[10][arr.length];
@@ -111,6 +111,50 @@ public class RadixSort_float {
             // Print a newline to separate bins
             System.out.println();
         }
+    }
+
+    public static int findLongestSignificantValue(double[] arr) {
+        int maxSignificantDigits = 0;
+        for (double num : arr) {
+            String numStr = String.valueOf(Math.abs(num));
+            String trimmed = numStr.replaceFirst("^0+", "")
+                                   .replaceFirst("0+$", "");
+            maxSignificantDigits = Math.max(maxSignificantDigits, trimmed.length());
+        }
+        return maxSignificantDigits;
+    }
+
+    public static int maxLengthOfWholeNum(double[] numbers) {
+        int maxLength = 0;
+
+        for (double number : numbers) {
+            String numberString = Double.toString(number);
+            int WholeNumLength = numberString.indexOf(".");
+            if (WholeNumLength != -1) {
+                maxLength = Math.max(maxLength, WholeNumLength);
+            }
+        }
+        return maxLength;
+    }
+
+    public static int maxLengthOfDecimalPlaces(double[] numbers) {
+        int maxLength = 0;
+
+        for(double num : numbers) {
+            String str = Double.toString(num);
+            int decimalIndex = str.indexOf('.');
+            if(decimalIndex != -1) {
+                int decimalLength = str.length() - 1 - decimalIndex;
+                maxLength = Math.max(maxLength, decimalLength);
+            }
+        }
+        return maxLength;
+    }
+
+    public static int maxLengthOfSignificantFigure(double[] numbers) {
+        int maxLength = maxLengthOfWholeNum(numbers) + maxLengthOfDecimalPlaces(numbers);
+        
+        return maxLength;
     }
 }
 

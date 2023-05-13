@@ -50,7 +50,7 @@ public class RadixSort_hundredth {
             // Iterate through the bins in Array1 or Array2 and copy values back into the input array
             for (int i = 0; i < 10; i++) {
                 for (int j = 0; j < count[i]; j++) {
-                    arr[index++] = d % 2 == 0 ? Array1[i][j] : Array2[i][j];
+                    arr[index++] = d % 2 == 0 ? Array1[i][j]     : Array2[i][j];
                 }
             }
 
