@@ -6,28 +6,37 @@ import java.util.Arrays;
 
 public class RadixSort_hundredth {
 
+//counter for counting the number of operations
+static long counter = 0;
+
     public static void main(String[] args) {
         // Sample input array to be sorted
         int[] arr = {275,87,426,61,409,170,677,503};
         
         // Call radixSort method to sort the input array
         int[] sortedArray = radixSort(arr);
-        
+
         // Print the final sorted array
         System.out.println("Final sorted array:");
         System.out.println(Arrays.toString(sortedArray));
+        System.out.println("Number of operations:"+counter+"\n");
     }
 
     public static int[] radixSort(int[] arr) {
         // Define the maximum number of digits to sort, up to the hundredth place
         int maxDigits = 3;
-        
+     
         // Initialize 2D arrays (bins) Array1 and Array2 to store values during sorting
         int[][] Array1 = new int[10][arr.length];
         int[][] Array2 = new int[10][arr.length];
 
         // Loop through each digit position up to maxDigits
         for (int d = 0; d < maxDigits; d++) {
+            /*
+             Comparison +1 for d < maxDigits
+             Addition & Assignment +2 for d++
+             */
+
             // Initialize counting array to store counts of digits in the current position
             int[] count = new int[10];
             
@@ -42,7 +51,17 @@ public class RadixSort_hundredth {
                 } else {
                     Array2[digit][count[digit]++] = i;
                 }
+            /*
+               Arithmentic(Division) +1 for (i / (int) Math.pow(10, d))
+               Arithmentic(Modulo) +1 for  % 10
+               Calling method +1 for Math.pow(10, d)
+               Assignment +1 for int digit
+               Comparison +1 for d % 2 == 0
+               Arithmentic(Modulo) +1 for d%2
+             */
+                counter += 6;
             }
+            
 
             // Initialize an index to track the position in the input array
             int index = 0;
@@ -50,8 +69,17 @@ public class RadixSort_hundredth {
             // Iterate through the bins in Array1 or Array2 and copy values back into the input array
             for (int i = 0; i < 10; i++) {
                 for (int j = 0; j < count[i]; j++) {
-                    arr[index++] = d % 2 == 0 ? Array1[i][j]     : Array2[i][j];
+                    arr[index++] = d % 2 == 0 ? Array1[i][j]: Array2[i][j];
                 }
+
+                /*
+                 Comparison +1 for i<10
+                 Addition & Assignment +2 for i++
+                 Comparison +1 for j<count[i]
+                 Addition & Assignment +2 for j++
+                 Arithmetic(Modulo) & Comparison +2 for  d % 2 == 0
+                 */
+                counter+=8;
             }
 
             // Print the 2D bin array after the current iteration
@@ -92,6 +120,7 @@ public class RadixSort_hundredth {
             System.out.println();
         }
     }
+  
 }
 
 
