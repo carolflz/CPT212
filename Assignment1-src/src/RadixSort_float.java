@@ -3,6 +3,7 @@ must be a modification, and not a different implementation or variant of
 radix sort. (30%) **/
 
 import java.util.Arrays;
+import java.text.DecimalFormat;
 
 public class RadixSort_float {
 
@@ -17,31 +18,14 @@ public class RadixSort_float {
         System.out.println("Final sorted array:");
         System.out.println(Arrays.toString(sortedArray));
     }
-
- /** Method 1: Can work but got 4 iterations
-  * To find the maximun digits for the floationg-point number in an array
-    public static int maxFloatDigits(double[] arr) {
-        int maxDigits = 0;
-        for (double num : arr) {
-            String[] parts = Double.toString(num).split("\\.");
-            int digits = parts[0].length() + parts[1].length();
-            if (digits > maxDigits) {
-                maxDigits = digits;
-            }
-        }
-        return maxDigits;
-    }
-
-    public static double[] radixSort(double[] arr) {
-        // Define the maximum number of digits to sort, up to the hundredth place
-        int maxDigits = maxFloatDigits(arr); **/
-
-    //Method 2: Settle in 3 iterations    
+    
+    // Radix Sort Method
     public static double[] radixSort(double[] arr) {
         // Define the maximum number of digits to sort, based on the largest magnitude of the input array
-        int maxDigits = maxLengthOfSignificantFigure(arr);
+        int maxLengthOfDecimalPlaces = maxLengthOfDecimalPlaces(arr);
+        int maxLengthOfWholeNum = maxLengthOfWholeNum(arr);
+        int maxDigits = maxLengthOfDecimalPlaces + maxLengthOfWholeNum;
    
-
         // Initialize 2D arrays (bins) Array1 and Array2 to store values during sorting
         double[][] Array1 = new double[10][arr.length];
         double[][] Array2 = new double[10][arr.length];
@@ -50,19 +34,34 @@ public class RadixSort_float {
         for (int d = 0; d < maxDigits; d++) {
             // Initialize counting array to store counts of digits in the current position
             int[] count = new int[10];
-            
+
+            // Calculate the place value of the current digit position
+            int placeValue = d - maxLengthOfDecimalPlaces;
+
+            // Initialize a pattern to extract digits at the current position
+            DecimalFormat decimalFormat;
+            String pattern = "#.#";
+
+            if((maxLengthOfDecimalPlaces - d) > 0){
+                pattern = "#." + "#".repeat(maxLengthOfDecimalPlaces - d);                
+            }
+           
+            decimalFormat = new DecimalFormat(pattern);
+           
             // Iterate through the input array to extract digits at the current position
-            for (double i : arr) {
+            for (double number : arr) {                                 
                 // Calculate the digit at the current position using integer division and modulo
-                int digit = (int) ((i / (int) Math.pow(10, d)) % 10);
+                String numberString = decimalFormat.format(number / Math.pow(10, placeValue)); //Use decimalFormat to prevent Java binary floating point error
+                int digit = (int) (Double.parseDouble(numberString) % 10); // Parse the decimalFormat string back to double format
                 
                 // Add the value to the appropriate bin in Array1 or Array2 based on digit position
                 if (d % 2 == 0) {
-                    Array1[digit][count[digit]++] = i;
+                    Array1[digit][count[digit]++] = number;
                 } else {
-                    Array2[digit][count[digit]++] = i;
+                    Array2[digit][count[digit]++] = number;
                 }
             }
+            
 
             // Initialize an index to track the position in the input array
             int index = 0;
@@ -113,45 +112,35 @@ public class RadixSort_float {
         }
     }
 
-    public static int findLongestSignificantValue(double[] arr) {
-        int maxSignificantDigits = 0;
-        for (double num : arr) {
-            String numStr = String.valueOf(Math.abs(num));
-            String trimmed = numStr.replaceFirst("^0+", "")
-                                   .replaceFirst("0+$", "");
-            maxSignificantDigits = Math.max(maxSignificantDigits, trimmed.length());
-        }
-        return maxSignificantDigits;
-    }
-
+    //Method to find the maximum length of whole numbers of an array of doubles (eg: 1234.45, maxLength = 4)
     public static int maxLengthOfWholeNum(double[] numbers) {
         int maxLength = 0;
 
         for (double number : numbers) {
-            String numberString = Double.toString(number);
-            int WholeNumLength = numberString.indexOf(".");
-            if (WholeNumLength != -1) {
-                maxLength = Math.max(maxLength, WholeNumLength);
-            }
+            String numberString = Double.toString(number); // Convert Double to String
+            int WholeNumLength = numberString.indexOf("."); // Identify the index/position of the decimal point
+            maxLength = Math.max(maxLength, WholeNumLength); // Compare and return the maximum length
         }
         return maxLength;
     }
 
+    //Method to find the maximum length of decimal places of an array of doubles (eg: 1234.45, maxLength = 2)
     public static int maxLengthOfDecimalPlaces(double[] numbers) {
         int maxLength = 0;
 
         for(double num : numbers) {
-            String str = Double.toString(num);
-            int decimalIndex = str.indexOf('.');
-            if(decimalIndex != -1) {
-                int decimalLength = str.length() - 1 - decimalIndex;
-                maxLength = Math.max(maxLength, decimalLength);
-            }
+            String str = Double.toString(num); // Convert Double to String
+            int decimalIndex = str.indexOf('.'); // Identify the index/position of the decimal point
+            int decimalLength = str.length() - 1 - decimalIndex; // Calculate the length of decimal places
+            maxLength = Math.max(maxLength, decimalLength); // Compare and return the maximum length
+            
         }
         return maxLength;
     }
 
+    //Method to find the maximum length of significant figures of an array of doubles (eg: 1234.45, maxLength = 6)
     public static int maxLengthOfSignificantFigure(double[] numbers) {
+        //Add the maximum length of whole number and decimal places
         int maxLength = maxLengthOfWholeNum(numbers) + maxLengthOfDecimalPlaces(numbers);
         
         return maxLength;
