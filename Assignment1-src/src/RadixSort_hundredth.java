@@ -12,7 +12,7 @@ static long counter = 0;
     public static void main(String[] args) {
         // Sample input array to be sorted
         int[] arr = {275,87,426,61,409,170,677,503};
-        
+
         // Call radixSort method to sort the input array
         int[] sortedArray = radixSort(arr);
 
