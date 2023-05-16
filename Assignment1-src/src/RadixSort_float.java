@@ -5,6 +5,10 @@ radix sort. (30%) **/
 
 import java.util.Arrays;
 import java.text.DecimalFormat;
+import java.util.Random;
+import java.util.ArrayList;
+import java.util.List;
+// import javax.management.openmbean.ArrayType;
 
 public class RadixSort_float {
     // Counter for counting primitive operations
@@ -14,8 +18,38 @@ public class RadixSort_float {
         // Sample input array to be sorted
         double[] arr = { 275.4, 87.2222, 87.2221, 90.32, 20.12, 426.1, 61.9, 409.5, 170.8, 107.888, 677.3, 503.0 };
 
+        // To get 1000 number of inputs
+        double input_size = 300;
+
+        //add randomly generated double to array list
+        List<Double> tempList = new ArrayList<>();
+        for (double Double:arr)
+        {
+            tempList.add(Double);
+        }
+
+        //Add new numbers in double that are not duplicated with the initial array input
+        Random rand = new Random();
+        while (tempList.size()<input_size)
+        {
+            double random_Double = rand.nextDouble();
+            // set the decimal of double to x.0000
+            DecimalFormat df = new DecimalFormat("#.0000");
+            String Doubleformatted =df.format(random_Double);
+            random_Double = Double.parseDouble(Doubleformatted);
+            if(!tempList.contains(random_Double))
+            {
+                tempList.add(random_Double);
+            }
+        }
+
+        double[] newArr = new double [tempList.size()];
+        for (int i=0; i < tempList.size();i++)
+        {
+            newArr [i] = tempList.get(i);
+        }
         // Call radixSort method to sort the input array
-        double[] sortedArray = radixSort(arr);
+        double[] sortedArray = radixSort(newArr);
 
         // Print the final sorted array
         System.out.println("Final sorted array:");
@@ -24,26 +58,24 @@ public class RadixSort_float {
     }
 
     // Radix Sort Method
-    public static double[] radixSort(double[] arr) {
+    public static double[] radixSort(double[] newArr) {
         // Define the maximum number of digits to sort, based on the largest magnitude
         // of the input array
-        int maxLengthOfDecimalPlaces = maxLengthOfDecimalPlaces(arr);
-        int maxLengthOfWholeNum = maxLengthOfWholeNum(arr);
+        int maxLengthOfDecimalPlaces = maxLengthOfDecimalPlaces(newArr);
+        int maxLengthOfWholeNum = maxLengthOfWholeNum(newArr);
         int maxDigits = maxLengthOfDecimalPlaces + maxLengthOfWholeNum;
 
         // Initialize 2D arrays (bins) Array1 and Array2 to store values during sorting
-        double[][] Array1 = new double[10][arr.length];
-        double[][] Array2 = new double[10][arr.length];
+        double[][] Array1 = new double[10][newArr.length];
+        double[][] Array2 = new double[10][newArr.length];
 
         // Loop through each digit position up to maxDigits
+       counter++; // for assignment of d
         for (int d = 0; d < maxDigits; d++) {
+            counter +=3; // for comparison,addition and assignment
+
             // Initialize counting array to store counts of digits in the current position
             int[] count = new int[10];
-            /*
-             * Comparison +1 for d<maxDigits
-             * Addition & Assignment +1 for d++
-             */
-            counter += 2;
 
             // Calculate the place value of the current digit position
             int placeValue = d - maxLengthOfDecimalPlaces;
@@ -52,42 +84,40 @@ public class RadixSort_float {
             DecimalFormat decimalFormat;
             String pattern = "#.#";
 
+            counter +=2; //for arithmetic and comparison
             if ((maxLengthOfDecimalPlaces - d) > 0) {
                 pattern = "#." + "#".repeat(maxLengthOfDecimalPlaces - d);
+                counter+= 4; // for assignment,arithmetic (addition),method calling, arithmetic(minus)
             }
 
             decimalFormat = new DecimalFormat(pattern);
+            counter+=2; //for assignment and method calling
 
             // Iterate through the input array to extract digits at the current position
-            for (double number : arr) {
+            for (double number : newArr) {
                 // Calculate the digit at the current position using integer division and modulo
                 String numberString = decimalFormat.format(number / Math.pow(10, placeValue)); // Use decimalFormat to
                                                                                                // prevent Java binary
                                                                                                // floating point error
+                counter += 2; //for method calling and arithmetic(division)
+
                 int digit = (int) (Double.parseDouble(numberString) % 10); // Parse the decimalFormat string back to
                                                                            // double format
-                /*
-                 * Calling method +1 for decimalFormat.format
-                 * Arithmetic (Division) +1 for number / Math.pow
-                 * Calling method +1 for Math.pow
-                 * Calling method +1 for Double.parseDouble
-                 * Arithmetic (Modulus) +1 for (numberString) % 10
-                 */
-
+                counter += 2; //for method calling and arithmetic(modulus)
+                
                 // Add the value to the appropriate bin in Array1 or Array2 based on digit
                 // position
+
+                counter+=2; // for arithmetic(modulus) and comparison
                 if (d % 2 == 0) {
                     Array1[digit][count[digit]++] = number;
+                    counter+=2; // for addition and assignment
                 } else {
                     Array2[digit][count[digit]++] = number;
+                    counter+=2; // for addition and assignment
                 }
 
-                /*
-                 * Arithmetic (Modulus) +1 for d%2
-                 * Comparison +1 for d%2==0
-                 * Addition & Assignment +2 for Array1 or 2[digit][count[digit]++] = number;
-                 * Assignment +1 for number
-                 */
+               
             }
 
             // Initialize an index to track the position in the input array
@@ -95,18 +125,17 @@ public class RadixSort_float {
 
             // Iterate through the bins in Array1 or Array2 and copy values back into the
             // input array
-            for (int i = 0; i < 10; i++) {
-                for (int j = 0; j < count[i]; j++) {
-                    arr[index++] = d % 2 == 0 ? Array1[i][j] : Array2[i][j];
-                }
-                /*
-                 * Comparison +1 for i <10
-                 * Addition & Assignment +2 for i++
-                 * Comparison +1 for j<count[i]
-                 * Addition & Assignment +2 for j++
-                 */
-                counter += 6;
 
+            counter ++; //for initialization of i
+            for (int i = 0; i < 10; i++) {
+                counter += 3; // for comparison,addition and assignment
+                counter++; //for assignment of j=0
+                for (int j = 0; j < count[i]; j++) {
+                    counter += 3; //for comparison,addition and assignment
+
+                    newArr[index++] = d % 2 == 0 ? Array1[i][j] : Array2[i][j];
+                    counter+=4; //for addtion,assignment,arithmetic(modulus)and comparison
+                }
             }
 
             // Print the 2D bin array after the current iteration
@@ -128,7 +157,7 @@ public class RadixSort_float {
             }
         }
         // Return the sorted input array
-        return arr;
+        return newArr;
     }
 
     // Helper method to print 2D bin arrays with their counts
