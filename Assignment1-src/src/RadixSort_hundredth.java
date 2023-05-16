@@ -17,7 +17,7 @@ public class RadixSort_hundredth {
         // Sample input array to be sorted
         int[] arr = { 275, 87, 426, 61, 409, 170, 677, 503 };
         // To get new number of inputs for experiment for q3
-        int input_size = 1000;
+        int input_size = 200;
 
         // add randomly generated integer to array list
         List<Integer> tempList = new ArrayList<>();
@@ -71,7 +71,7 @@ public class RadixSort_hundredth {
                 // Calculate the digit at the current position using integer division and modulo
                 int digit = (i / (int) Math.pow(10, d)) % 10;
                 counter += 3; // for division, method calling and arithmetic
-                
+
                 // Add the value to the appropriate bin in Array1 or Array2 based on digit position
                 counter++; //for comparison of d%2
                 if (d % 2 == 0) {
