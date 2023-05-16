@@ -19,7 +19,7 @@ public class RadixSort_float {
         double[] arr = { 275.4, 87.2222, 87.2221, 90.32, 20.12, 426.1, 61.9, 409.5, 170.8, 107.888, 677.3, 503.0 };
 
         // To get number of inputs for experiment of q3
-        double input_size = 300;
+        double input_size = 1000;
 
         //add randomly generated double to array list
         List<Double> tempList = new ArrayList<>();
