@@ -15,46 +15,22 @@ public class RadixSort_float {
     static long counter = 0;
 
     public static void main(String[] args) {
-        // Sample input array to be sorted
-        double[] arr = { 275.4, 87.2222, 87.2221, 90.32, 20.12, 426.1, 61.9, 409.5, 170.8, 107.888, 677.3, 503.0 };
+        int size = 1;
+        int wholeNum_figures = 1;
+        int decimal_figures = 1;
+        for (; size < 100; wholeNum_figures += 2,decimal_figures += 1 , size *= 2) {
+                // Generate random array of size 10^i
+                double[] arr = generateRandomArray(size, wholeNum_figures, decimal_figures);
 
-        // To get number of inputs for experiment of q3
-        double input_size = 1000;
+                // Call radixSort method to sort the input array
+                double[] sortedArray = radixSort(arr);
 
-        //add randomly generated double to array list
-        List<Double> tempList = new ArrayList<>();
-        for (double Double:arr)
-        {
-            tempList.add(Double);
+                // Print the final sorted array
+                System.out.println("Final sorted array:");
+                System.out.println(Arrays.toString(sortedArray));
+                System.out.println("Number of operations:" + counter + "\n");
+            
         }
-
-        //Add new numbers in double that are not duplicated with the initial array input
-        Random rand = new Random();
-        while (tempList.size()<input_size)
-        {
-            double random_Double = rand.nextDouble();
-            // set the decimal of double to x.0000
-            DecimalFormat df = new DecimalFormat("#.0000");
-            String Doubleformatted =df.format(random_Double);
-            random_Double = Double.parseDouble(Doubleformatted);
-            if(!tempList.contains(random_Double))
-            {
-                tempList.add(random_Double);
-            }
-        }
-
-        double[] newArr = new double [tempList.size()];
-        for (int i=0; i < tempList.size();i++)
-        {
-            newArr [i] = tempList.get(i);
-        }
-        // Call radixSort method to sort the input array
-        double[] sortedArray = radixSort(newArr);
-
-        // Print the final sorted array
-        System.out.println("Final sorted array:");
-        System.out.println(Arrays.toString(sortedArray));
-        System.out.println("Number of operations:" + counter + "\n");
     }
 
     // Radix Sort Method
@@ -239,4 +215,24 @@ public class RadixSort_float {
 
         return maxLength;
     }
+
+    // Helper method to generate an array of random integers
+    private static double[] generateRandomArray(int size, int wholeNum_figures, int decimal_figures) {
+        // Initialize a new array of the given size
+        double[] arr = new double[size];
+
+        // Initialize a new Random object
+        Random rand = new Random();
+
+        // Iterate through the array and assign each element a random integer
+        for (int i = 0; i < size; i++) {
+            int total_figures = wholeNum_figures + decimal_figures;
+            int bound = (int) Math.pow(10, total_figures);
+            arr[i] = (double) rand.nextInt(bound) / (double) Math.pow(10, decimal_figures) ;
+        }
+
+        // Return the array
+        return arr;
+    }
+
 }

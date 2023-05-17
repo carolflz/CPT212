@@ -14,34 +14,28 @@ public class RadixSort_hundredth {
     static long counter = 0;
 
     public static void main(String[] args) {
+
+        int size = 1;
+        int figures = 1;
+        for (; size < 100; figures += 2, size *= 2) {
+                // Generate random array of size 10^i
+                int[] arr = generateRandomArray(size, figures);
+
+                // Call radixSort method to sort the input array
+                int[] sortedArray = radixSort(arr);
+
+                // Print the final sorted array
+                System.out.println("Final sorted array:");
+                System.out.println(Arrays.toString(sortedArray));
+                System.out.println("Number of operations:" + counter + "\n");
+            
+        }
+
         // Sample input array to be sorted
-        int[] arr = { 275, 87, 426, 61, 409, 170, 677, 503 };
-        // To get new number of inputs for experiment for q3
-        int input_size = 200;
-
-        // add randomly generated integer to array list
-        List<Integer> tempList = new ArrayList<>();
-        for (int integer : arr) {
-            tempList.add(integer);
-
-        }
-
-        // add new integer that are not duplicated with the initial array input
-        Random rand = new Random();
-        while (tempList.size() < input_size) {
-            int random_Integer = rand.nextInt(1000); // generate random integer between 0 and 1000
-            if (!tempList.contains(random_Integer)) {
-                tempList.add(random_Integer);
-            }
-        }
-
-        int[] newArr = new int[tempList.size()];
-        for (int i = 0; i < tempList.size(); i++) {
-            newArr[i] = tempList.get(i);
-        }
+        int[] arr = generateRandomArray(10, 3);
 
         // Call radixSort method to sort the input array
-        int[] sortedArray = radixSort(newArr);
+        int[] sortedArray = radixSort(arr);
 
         // Print the final sorted array
         System.out.println("Final sorted array:");
@@ -52,7 +46,7 @@ public class RadixSort_hundredth {
 
     public static int[] radixSort(int[] newArr) {
         // Define the maximum number of digits to sort, up to the hundredth place
-        int maxDigits = 4;
+        int maxDigits = maxLengthOfWholeNum(newArr);
 
         // Initialize 2D arrays (bins) Array1 and Array2 to store values during sorting
         int[][] Array1 = new int[10][newArr.length];
@@ -144,6 +138,47 @@ public class RadixSort_hundredth {
             // Print a newline to separate bins
             System.out.println();
         }
+    }
+
+    // Method to find the maximum length of whole numbers of an array of doubles
+    // (eg: 1234.45, maxLength = 4)
+    public static int maxLengthOfWholeNum(int[] numbers) {
+        int maxLength = 0;
+
+        for (double number : numbers) {
+            String numberString = Double.toString(number); // Convert Double to String
+            int WholeNumLength = numberString.indexOf("."); // Identify the index/position of the decimal point
+            maxLength = Math.max(maxLength, WholeNumLength); // Compare and return the maximum length
+        } /*
+           * Assignment +1 for String numberString
+           * Assignment +1 for int WholeNumLength
+           * Assignment +1 for maxLength
+           * Calling method +1 for Double.toString
+           * Calling method +1 for numberString.indexOf
+           * Calling method +1 for Math.max
+           * Return method +1 for return maxLength;
+           */
+        counter += 7;
+        return maxLength;
+
+    }
+ 
+    // Helper method to generate an array of random integers
+    private static int[] generateRandomArray(int size, int figures) {
+        // Initialize a new array of the given size
+        int[] arr = new int[size];
+
+        // Initialize a new Random object
+        Random rand = new Random();
+
+        // Iterate through the array and assign each element a random integer
+        for (int i = 0; i < size; i++) {
+            int bound = (int) Math.pow(10, figures);
+            arr[i] = rand.nextInt(bound);
+        }
+
+        // Return the array
+        return arr;
     }
 
 }
