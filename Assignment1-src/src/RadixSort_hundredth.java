@@ -29,7 +29,7 @@ public class RadixSort_hundredth {
         // add new integer that are not duplicated with the initial array input
         Random rand = new Random();
         while (tempList.size() < input_size) {
-            int random_Integer = rand.nextInt();
+            int random_Integer = rand.nextInt(1000); // generate random integer between 0 and 1000
             if (!tempList.contains(random_Integer)) {
                 tempList.add(random_Integer);
             }
@@ -73,7 +73,7 @@ public class RadixSort_hundredth {
                 counter += 3; // for division, method calling and arithmetic
 
                 // Add the value to the appropriate bin in Array1 or Array2 based on digit position
-                counter++; //for comparison of d%2
+                counter+=2; //for arithmetic(modulus) and comparison of d%2
                 if (d % 2 == 0) {
                     Array1[digit][count[digit]++] = i;
                     counter+=2; //for addition and assignment
