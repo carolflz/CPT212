@@ -6,9 +6,6 @@ radix sort. (30%) **/
 import java.util.Arrays;
 import java.text.DecimalFormat;
 import java.util.Random;
-import java.util.ArrayList;
-import java.util.List;
-// import javax.management.openmbean.ArrayType;
 
 public class RadixSort_float {
     // Counter for counting primitive operations
@@ -16,20 +13,20 @@ public class RadixSort_float {
 
     public static void main(String[] args) {
         int size = 1;
-        int wholeNum_figures = 1;
+        int wholeNum_figures = 2;
         int decimal_figures = 1;
-        for (; size < 100; wholeNum_figures += 2,decimal_figures += 1 , size *= 2) {
-                // Generate random array of size 10^i
-                double[] arr = generateRandomArray(size, wholeNum_figures, decimal_figures);
+        for (;size<= 100;decimal_figures+=1,size+=10) {
+            // Generate random array of size 10^i
+            double[] arr = generateRandomArray(size, wholeNum_figures, decimal_figures);
 
-                // Call radixSort method to sort the input array
-                double[] sortedArray = radixSort(arr);
+            // Call radixSort method to sort the input array
+            double[] sortedArray = radixSort(arr);
 
-                // Print the final sorted array
-                System.out.println("Final sorted array:");
-                System.out.println(Arrays.toString(sortedArray));
-                System.out.println("Number of operations:" + counter + "\n");
-            
+            // Print the final sorted array
+            System.out.println("Final sorted array:");
+            System.out.println(Arrays.toString(sortedArray));
+            System.out.println("Number of operations:" + counter + "\n");
+
         }
     }
 
@@ -46,9 +43,9 @@ public class RadixSort_float {
         double[][] Array2 = new double[10][newArr.length];
 
         // Loop through each digit position up to maxDigits
-       counter++; // for assignment of d
+        counter++; // for assignment of d
         for (int d = 0; d < maxDigits; d++) {
-            counter +=3; // for comparison,addition and assignment
+            counter += 3; // for comparison,addition and assignment
 
             // Initialize counting array to store counts of digits in the current position
             int[] count = new int[10];
@@ -60,14 +57,14 @@ public class RadixSort_float {
             DecimalFormat decimalFormat;
             String pattern = "#.#";
 
-            counter +=2; //for arithmetic and comparison
+            counter += 2; // for arithmetic and comparison
             if ((maxLengthOfDecimalPlaces - d) > 0) {
                 pattern = "#." + "#".repeat(maxLengthOfDecimalPlaces - d);
-                counter+= 4; // for assignment,arithmetic (addition),method calling, arithmetic(minus)
+                counter += 4; // for assignment,arithmetic (addition),method calling, arithmetic(minus)
             }
 
             decimalFormat = new DecimalFormat(pattern);
-            counter+=2; //for assignment and method calling
+            counter += 2; // for assignment and method calling
 
             // Iterate through the input array to extract digits at the current position
             for (double number : newArr) {
@@ -75,25 +72,24 @@ public class RadixSort_float {
                 String numberString = decimalFormat.format(number / Math.pow(10, placeValue)); // Use decimalFormat to
                                                                                                // prevent Java binary
                                                                                                // floating point error
-                counter += 2; //for method calling and arithmetic(division)
+                counter += 2; // for method calling and arithmetic(division)
 
                 int digit = (int) (Double.parseDouble(numberString) % 10); // Parse the decimalFormat string back to
                                                                            // double format
-                counter += 2; //for method calling and arithmetic(modulus)
-                
+                counter += 2; // for method calling and arithmetic(modulus)
+
                 // Add the value to the appropriate bin in Array1 or Array2 based on digit
                 // position
 
-                counter+=2; // for arithmetic(modulus) and comparison
+                counter += 2; // for arithmetic(modulus) and comparison
                 if (d % 2 == 0) {
                     Array1[digit][count[digit]++] = number;
-                    counter+=2; // for addition and assignment
+                    counter += 2; // for addition and assignment
                 } else {
                     Array2[digit][count[digit]++] = number;
-                    counter+=2; // for addition and assignment
+                    counter += 2; // for addition and assignment
                 }
 
-               
             }
 
             // Initialize an index to track the position in the input array
@@ -102,15 +98,15 @@ public class RadixSort_float {
             // Iterate through the bins in Array1 or Array2 and copy values back into the
             // input array
 
-            counter ++; //for initialization of i
+            counter++; // for initialization of i
             for (int i = 0; i < 10; i++) {
                 counter += 3; // for comparison,addition and assignment
-                counter++; //for assignment of j=0
+                counter++; // for assignment of j=0
                 for (int j = 0; j < count[i]; j++) {
-                    counter += 3; //for comparison,addition and assignment
+                    counter += 3; // for comparison,addition and assignment
 
                     newArr[index++] = d % 2 == 0 ? Array1[i][j] : Array2[i][j];
-                    counter+=4; //for addtion,assignment,arithmetic(modulus)and comparison
+                    counter += 4; // for addtion,assignment,arithmetic(modulus)and comparison
                 }
             }
 
@@ -228,7 +224,7 @@ public class RadixSort_float {
         for (int i = 0; i < size; i++) {
             int total_figures = wholeNum_figures + decimal_figures;
             int bound = (int) Math.pow(10, total_figures);
-            arr[i] = (double) rand.nextInt(bound) / (double) Math.pow(10, decimal_figures) ;
+            arr[i] = (double) rand.nextInt(bound) / (double) Math.pow(10, decimal_figures);
         }
 
         // Return the array

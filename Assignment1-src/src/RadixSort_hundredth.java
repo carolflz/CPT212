@@ -5,8 +5,7 @@ described. (40%) **/
 
 import java.util.Arrays;
 import java.util.Random;
-import java.util.List;
-import java.util.ArrayList;
+
 
 public class RadixSort_hundredth {
 
@@ -15,9 +14,9 @@ public class RadixSort_hundredth {
 
     public static void main(String[] args) {
 
-        int size = 1;
+        int size = 10;
         int figures = 1;
-        for (; size < 100; figures += 2, size *= 2) {
+        for (; size<100; size+=10) {
                 // Generate random array of size 10^i
                 int[] arr = generateRandomArray(size, figures);
 
